@@ -191,3 +191,4 @@ local function SGRWUDK_fake_script()
 	end)
 end
 coroutine.wrap(SGRWUDK_fake_script)()
+task.defer(applyTheme)
