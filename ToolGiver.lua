@@ -14,7 +14,6 @@ ScreenGui.ResetOnSpawn = false
 
 Frame.Parent = ScreenGui
 Frame.Active = true
-Frame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
 Frame.BorderSizePixel = 0
 Frame.Position = UDim2.new(0.061, 0, 0.093, 0)
 Frame.Size = UDim2.new(0, 230, 0, 250)
@@ -24,7 +23,6 @@ corner1.CornerRadius = UDim.new(0, 12)
 
 ScrollingFrame.Parent = Frame
 ScrollingFrame.Active = true
-ScrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 ScrollingFrame.BorderSizePixel = 0
 ScrollingFrame.Position = UDim2.new(0.065, 0, 0.18, 0)
 ScrollingFrame.Size = UDim2.new(0, 200, 0, 145)
@@ -38,7 +36,6 @@ UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Padding = UDim.new(0, 5)
 
 TextButton.Parent = ScrollingFrame
-TextButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 TextButton.BorderSizePixel = 0
 TextButton.Size = UDim2.new(0, 170, 0, 40)
 TextButton.Visible = false
@@ -51,20 +48,17 @@ local buttonCorner = Instance.new("UICorner", TextButton)
 buttonCorner.CornerRadius = UDim.new(0, 8)
 
 TextLabel.Parent = Frame
-TextLabel.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
 TextLabel.BorderSizePixel = 0
 TextLabel.Position = UDim2.new(0, 0, 0, 0)
 TextLabel.Size = UDim2.new(0, 230, 0, 30)
 TextLabel.Font = Enum.Font.GothamBold
 TextLabel.Text = "🔧 Tool Giver"
-TextLabel.TextColor3 = Color3.fromRGB(30, 30, 30)
 TextLabel.TextSize = 16
 
 local labelCorner = Instance.new("UICorner", TextLabel)
 labelCorner.CornerRadius = UDim.new(0, 8)
 
 TextButton_2.Parent = Frame
-TextButton_2.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
 TextButton_2.BorderSizePixel = 0
 TextButton_2.Position = UDim2.new(0.07, 0, 0.83, 0)
 TextButton_2.Size = UDim2.new(0, 200, 0, 30)
@@ -78,13 +72,10 @@ updateCorner.CornerRadius = UDim.new(0, 8)
 
 ThemeToggle.Name = "ThemeToggle"
 ThemeToggle.Parent = Frame
-ThemeToggle.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 ThemeToggle.BorderSizePixel = 0
 ThemeToggle.Position = UDim2.new(1, -28, 0, 2)
 ThemeToggle.Size = UDim2.new(0, 24, 0, 24)
 ThemeToggle.Font = Enum.Font.Gotham
-ThemeToggle.Text = "☀️"
-ThemeToggle.TextColor3 = Color3.fromRGB(50, 50, 50)
 ThemeToggle.TextSize = 12
 
 local toggleCorner = Instance.new("UICorner", ThemeToggle)
@@ -101,6 +92,7 @@ local function applyTheme()
 		TextButton_2.BackgroundColor3 = Color3.fromRGB(0, 150, 90)
 		ThemeToggle.Text = "🌙"
 		ThemeToggle.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+		TextButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 	else
 		Frame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
 		ScrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -109,19 +101,19 @@ local function applyTheme()
 		TextButton_2.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
 		ThemeToggle.Text = "☀️"
 		ThemeToggle.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+		TextButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 	end
 end
+
+applyTheme()
 
 ThemeToggle.MouseButton1Click:Connect(function()
 	isDarkMode = not isDarkMode
 	applyTheme()
 end)
 
-applyTheme()
-
 local function FNDR_fake_script()
 	local script = Instance.new('LocalScript', Frame)
-
 	local button = script.Parent.ScrollingFrame.TextButton
 	button.Parent = nil
 	button.Name = "slaves"
@@ -133,12 +125,12 @@ local function FNDR_fake_script()
 			end
 		end
 
-		local function cloneToBackpack(toolName)
-			local clonedTool = toolName:Clone()
+		local function cloneToBackpack(tool)
+			local clonedTool = tool:Clone()
 			clonedTool.Parent = game:GetService("Players").LocalPlayer:WaitForChild("Backpack")
 		end
 
-		for i, v in pairs(game:GetDescendants()) do
+		for _, v in pairs(game:GetDescendants()) do
 			if v:IsA("Tool") and v.Parent.Parent ~= game:GetService("Players").LocalPlayer then
 				local clonebutton = button:Clone()
 				clonebutton.Parent = script.Parent.ScrollingFrame
@@ -147,9 +139,15 @@ local function FNDR_fake_script()
 				clonebutton.MouseButton1Click:Connect(function()
 					cloneToBackpack(v)
 				end)
-
 				local c = Instance.new("UICorner", clonebutton)
 				c.CornerRadius = UDim.new(0, 6)
+				if isDarkMode then
+					clonebutton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+					clonebutton.TextColor3 = Color3.fromRGB(240, 240, 240)
+				else
+					clonebutton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+					clonebutton.TextColor3 = Color3.fromRGB(50, 50, 50)
+				end
 			end
 		end
 	end
@@ -160,25 +158,19 @@ coroutine.wrap(FNDR_fake_script)()
 
 local function SGRWUDK_fake_script()
 	local script = Instance.new('LocalScript', Frame)
-
 	local UIS = game:GetService('UserInputService')
 	local frame = script.Parent
-	local dragToggle = nil
+	local dragToggle, dragStart, startPos = nil, nil, nil
 	local dragSpeed = 0.1
-	local dragStart = nil
-	local startPos = nil
 
 	local function updateInput(input)
 		local delta = input.Position - dragStart
-		local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
-			startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-		game:GetService('TweenService'):Create(frame, TweenInfo.new(dragSpeed), {
-			Position = position
-		}):Play()
+		local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		game:GetService('TweenService'):Create(frame, TweenInfo.new(dragSpeed), {Position = position}):Play()
 	end
 
 	frame.InputBegan:Connect(function(input)
-		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then 
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then 
 			dragToggle = true
 			dragStart = input.Position
 			startPos = frame.Position
