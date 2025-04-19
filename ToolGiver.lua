@@ -90,7 +90,7 @@ ThemeToggle.TextSize = 12
 local toggleCorner = Instance.new("UICorner", ThemeToggle)
 toggleCorner.CornerRadius = UDim.new(1, 0)
 
-local isDarkMode = false
+local isDarkMode = true
 
 local function applyTheme()
 	if isDarkMode then
